@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-# pyarmor gen -O dist Codex.py
-# pyinstaller dist/Codex.py --onefile --icon=icon.ico --add-data "dist/pyarmor_runtime_000000;pyarmor_runtime_000000"
-
 import os, random, shutil, bz2, collections, time
 
 
@@ -303,17 +300,14 @@ class ImprovedCodexGame:
         with open(filename, "rb") as file:
             data = file.read()
 
-        # 1. сначала распаковываем bz2
         data = bz2.decompress(data)
 
-        # 2. теперь XOR как раньше
         key_bytes = "uStgURnWUEYbcKsfbvVuWRSnZz56bWv9lje/tUSLbJ4=".encode("utf-8")
         decrypted_data = bytearray()
 
         for i, byte in enumerate(data):
             decrypted_data.append(byte ^ key_bytes[i % len(key_bytes)])
 
-        # 3. и только после этого декодируем в строки
         return decrypted_data.decode("utf-8").splitlines()
 
 

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# pyarmor gen -O dist WordCodec.py
-# pyinstaller dist/WordCodec.py --onefile --icon=icon.ico --add-data "dist/pyarmor_runtime_000000;pyarmor_runtime_000000"
 
 import bz2
 import os
@@ -83,15 +81,12 @@ class WordCodec:
 
     def process(self) -> None:
         """Обрабатывает слова из файла и объединяет с существующими"""
-        # Загружаем существующие слова
         self.words = self.decode()
 
-        # Загружаем новые слова из файла
         new_words = self._load_words_from_file()
         if not new_words:
             return
 
-        # Фильтруем и добавляем валидные слова
         valid_words = []
         invalid_words = []
 
@@ -105,17 +100,14 @@ class WordCodec:
                 else:
                     print(f"Недопустимые символы в слове (пропущено): {word}")
 
-        # Добавляем валидные слова к существующим
         self.words.update(valid_words)
 
-        # Конвертируем в отсортированный список
         sorted_words = sorted(list(self.words))
 
         print(f"Обработано {len(valid_words)} новых слов")
         print(f"Пропущено {len(invalid_words)} невалидных слов")
         print(f"Общее количество уникальных слов: {len(sorted_words)}")
 
-        # Сохраняем закодированные данные
         words_text = "\n".join(sorted_words)
         self.encode(words_text.encode("utf-8"))
 
@@ -155,13 +147,6 @@ class WordCodec:
 
         print("=== WordCodec - Обработка файла ===")
         self.process()
-
-        # Показываем статистику
-        words_list = self.get_words_list()
-        if words_list:
-            print(f"\nПервые 10 слов: {words_list[:10]}")
-            if len(words_list) > 10:
-                print(f"... и еще {len(words_list) - 10} слов")
 
         input("\nНажмите Enter для завершения...")
 
